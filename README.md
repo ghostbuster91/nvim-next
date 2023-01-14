@@ -47,3 +47,6 @@ They need to accept a structure:
   repeating = /*true if the call is repeated, false otherwise */
 }
 ```
+# Credits
+
+The initial code for that plugin was created by @kiyoon during work at https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/359
