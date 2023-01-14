@@ -18,7 +18,7 @@ The idea is that other plugins like for example git-signs will expose logic to p
 and then we will wrap it with an adapter and plug into that engine. 
 
 Example:
-```
+```lua
 local nvim_next_builtins = require("nvim-next.builtins")
 require("nvim-next").setup({
     default_mappings = true,
@@ -30,7 +30,7 @@ require("nvim-next").setup({
 ```
 
 where `f` is a structure that defines key mapping and the function to invoke:
-```
+```lua
 f = {
         key_next = "f",
         key_prev = "F",
@@ -41,7 +41,7 @@ f = {
 
 The protocol for `func_next` and `func_prev` is defined as follows:
 They need to accept a structure:
-```
+```lua
 { result = /*here goes results of whatever your function returned, 
              nil if that is a first invocation */, 
   repeating = /*true if the call is repeated, false otherwise */
