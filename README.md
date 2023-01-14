@@ -42,9 +42,9 @@ f = {
 The protocol for `func_next` and `func_prev` is defined as follows:
 They need to accept a structure:
 ```lua
-{ result = --here goes results of whatever your function returned, 
-           --nil if that is a first invocation ,
-  repeating = --true if the call is repeated, false otherwise
+{ result = nil --here goes results of whatever your function returned, 
+               --nil if that is a first invocation ,
+  repeating = true --if the call is repeated, false otherwise
 }
 ```
 
