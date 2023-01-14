@@ -1,5 +1,7 @@
 local M = {}
+
 -- implements naive f, F, t, T with repeat support
+-- copied from https://github.com/kiyoon/nvim-treesitter-textobjects/blob/feat-movement-repeat/lua/nvim-treesitter/textobjects/move.lua#L97
 local function builtin_find(forward, inclusive, char, repeating)
     -- forward = true -> f, t
     -- inclusive = false -> t, T
@@ -69,20 +71,20 @@ local function builtin_find_prev(inclusive, char, repeating)
     return res
 end
 
-M.f = function(char, repeating)
-    return builtin_find_next("inclusive", char, repeating)
+M.f = function(opts)
+    return builtin_find_next("inclusive", opts.result, opts.repeating)
 end
 
-M.F = function(char, repeating)
-    return builtin_find_prev("inclusive", char, repeating)
+M.F = function(opts)
+    return builtin_find_prev("inclusive", opts.result, opts.repeating)
 end
 
-M.t = function(char, repeating)
-    return builtin_find_next(not "inclusive", char, repeating)
+M.t = function(opts)
+    return builtin_find_next(not "inclusive", opts.result, opts.repeating)
 end
 
-M.T = function(char, repeating)
-    return builtin_find_prev(not "inclusive", char, repeating)
+M.T = function(opts)
+    return builtin_find_prev(not "inclusive", opts.result, opts.repeating)
 end
 
 return M
