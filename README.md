@@ -47,6 +47,16 @@ They need to accept a structure:
   repeating = /*true if the call is repeated, false otherwise */
 }
 ```
+
+The `setup` function is only a convenient way of hooking external methods in the engine. 
+
+You can also do it the other way around:
+```lua
+local next = require("nvim-next").setup()
+vim.keymap.set("n", "f", next.wrap_f(functions.f, functions.F))
+vim.keymap.set("n", "F", next.wrap_f(functions.f, functions.F))
+```
+
 # Credits
 
 The initial code for that plugin was created by @kiyoon during work at https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/359
