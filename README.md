@@ -56,8 +56,8 @@ You can also do it the other way around:
 
 ```lua
 local next = require("nvim-next").setup()
-vim.keymap.set("n", "f", next.wrap_f(functions.f, functions.F))
-vim.keymap.set("n", "F", next.wrap_f(functions.f, functions.F))
+vim.keymap.set("n", "f", next.make_repeatable_move(functions.f, functions.F))
+vim.keymap.set("n", "F", next.make_repeatable_move(functions.f, functions.F))
 ```
 
 ## 3rd party integrations
