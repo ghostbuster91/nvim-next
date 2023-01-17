@@ -46,9 +46,10 @@ end
 
 M.make_repeatable_move = function(k)
     local k_copy = vim.deepcopy(k)
-    return function()
-        local result = k.func({ repeating = false })
-        local last_move = { opts = { result = result, repeating = true } }
+    return function(...)
+        local args = { ... }
+        local result = k.func({ repeating = false, args = args })
+        local last_move = { opts = { result = result, repeating = true, args = args } }
         M.last_move = vim.tbl_deep_extend("force", {}, k_copy, last_move)
     end
 end
