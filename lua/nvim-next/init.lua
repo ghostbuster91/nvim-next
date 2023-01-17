@@ -1,10 +1,29 @@
 local move = require("nvim-next.move")
 
+local default_config = {
+    default_mappings = {
+        enable = true,
+        repeat_style = "original" -- or directional
+    },
+    items = {}
+}
+
 local function setup(config)
-    config = config or { default_mappings = true, items = {} }
-    if config.default_mappings then
-        vim.keymap.set({ "n" }, ";", move.repeat_last_move, { desc = "nvim-next", noremap = true })
-        vim.keymap.set({ "n" }, ',', move.repeat_last_move_opposite, { desc = "nvim-prev", noremap = true })
+    config = vim.deepcopy(config or {})
+    config = vim.tbl_deep_extend("force", {}, default_config, config)
+    if config.default_mappings.enable then
+        if config.default_mappings.repeat_style == "orignal" then
+            vim.keymap.set({ "n" }, ";", move.repeat_last_move, { desc = "nvim-next", noremap = true })
+            vim.keymap.set({ "n" }, ',', move.repeat_last_move_opposite, { desc = "nvim-prev", noremap = true })
+        elseif config.default_mappings.repeat_style == "directional" then
+            vim.keymap.set({ "n" }, ";", move.repeat_last_move_forward, { desc = "nvim-next", noremap = true })
+            vim.keymap.set({ "n" }, ',', move.repeat_last_move_opposite_backward, { desc = "nvim-prev", noremap = true })
+        else
+            vim.notify(
+                "Unrecognized repeat_style value:" .. vim.inspect(config.default_mappings.repeat_style),
+                vim.log.levels.ERROR
+            )
+        end
     end
     for _, i in ipairs(config.items) do
 
