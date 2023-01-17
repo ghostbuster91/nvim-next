@@ -1,14 +1,15 @@
 local move = require("nvim-next.move")
 
 local function setup(config)
+    config = config or { default_mappings = true, items = {} }
     if config.default_mappings then
-        vim.keymap.set({ "n" }, ";", move.repeat_last_move)
-        vim.keymap.set({ "n" }, ",", move.repeat_last_move_opposite)
+        vim.keymap.set({ "n" }, ";", move.repeat_last_move, { desc = "nvim-next", noremap = true })
+        vim.keymap.set({ "n" }, ',', move.repeat_last_move_opposite, { desc = "nvim-prev", noremap = true })
     end
     for _, i in ipairs(config.items) do
-        local wrapped_prev, wrapped_next = move.make_repeatable_pair(i.func_prev, i.func_next)
-        vim.keymap.set({ "n" }, i.key_prev, wrapped_prev, i.opts)
-        vim.keymap.set({ "n" }, i.key_next, wrapped_next, i.opts)
+
+        vim.keymap.set({ "n" }, i.key_prev, i.func_prev, i.opts)
+        vim.keymap.set({ "n" }, i.key_next, i.func_next, i.opts)
     end
     return move
 end
