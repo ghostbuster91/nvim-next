@@ -28,7 +28,7 @@ Frist you need to initialize nvim-next. This will map `;` and  `,` to respetive 
 local nvim_next_builtins = require("nvim-next.builtins")
 require("nvim-next").setup({
     default_mappings = true, --set , and ; mappings
-    repeat_style = "directional"
+    repeat_style = "original"
     items = {
         nvim_next_builtins.f,
         nvim_next_builtins.t
