@@ -36,7 +36,7 @@ require("nvim-next").setup({
 })
 ```
 
-The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction of the repeat key: `;` - forward, `,` - backward. 
+The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward. 
 
 Any mappings including `f`/`t` can be also set later using following syntax:
 
