@@ -75,8 +75,9 @@ local on_attach = function(client, bufnr)
     end
 
     local nndiag = next_integrations.diagnostic()
-    mapB("n", "[d", nndiag.goto_prev({ wrap = false, severity = { min = diag.severity.WARN } }), "previous diagnostic")
-    mapB("n", "]d", nndiag.goto_next({ wrap = false, severity = { min = diag.severity.WARN } }), "next diagnostic")
+    mapB("n", "[d", nndiag.goto_prev({ severity = { min = diag.severity.WARN } }), "previous diagnostic")
+    mapB("n", "]d", nndiag.goto_next({ severity = { min = diag.severity.WARN } }), "next diagnostic") 
+end
 ```
 
 ### Treesitter text-objects
