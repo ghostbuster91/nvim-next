@@ -27,8 +27,8 @@ local function setup(config)
     end
     for _, i in ipairs(config.items) do
 
-        vim.keymap.set({ "n" }, i.key_prev, i.func_prev, i.opts)
-        vim.keymap.set({ "n" }, i.key_next, i.func_next, i.opts)
+        vim.keymap.set({ "n", "x", "o" }, i.key_prev, i.func_prev, i.opts)
+        vim.keymap.set({ "n", "x", "o" }, i.key_next, i.func_next, i.opts)
     end
     return move
 end

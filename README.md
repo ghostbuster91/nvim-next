@@ -16,38 +16,17 @@ You can think of it as of `nvim-cmp` but for movements.
 The idea is that other plugins like for example git-signs will expose logic to perform some movement,
 and then we will wrap it with an adapter and plug into that engine.
 
-Example:
+### Example 1: Overriding builtin f/t movements
 
 ```lua
 local nvim_next_builtins = require("nvim-next.builtins")
 require("nvim-next").setup({
-    default_mappings = true,
+    default_mappings = true, --set , and ; mappings
     items = {
         nvim_next_builtins.f,
         nvim_next_builtins.t
     }
 })
-```
-
-where `f` is a structure that defines key mapping and the function to invoke:
-
-```lua
-f = {
-        key_next = "f",
-        key_prev = "F",
-        func_next = functions.f,
-        func_prev = functions.F
-    },
-```
-
-The protocol for `func_next` and `func_prev` is defined as follows:
-They need to accept a structure:
-
-```lua
-{ result = nil --here goes results of whatever your function returned,
-               --nil if that is a first invocation ,
-  repeating = true --if the call is repeated, false otherwise
-}
 ```
 
 The `setup` function is only a convenient way of hooking external methods in the engine.
@@ -62,7 +41,9 @@ vim.keymap.set("n", "F", next.make_repeatable_move(functions.f, functions.F))
 
 ## 3rd party integrations
 
-Gitsings
+Nvim-next comes with multiple integrations out of the box for many popular plugins. Can't find your favorite one? Don't hesitate and create an issue. PRs are more than welcome.
+
+### [Gitsings](https://github.com/lewis6991/gitsigns.nvim)
 
 ```lua
 local next_integrations = require("nvim-next.integrations")
@@ -82,6 +63,77 @@ require("gitsigns").setup({
         map('n', '[c', nngs.prev_hunk, { expr = true })
     end,
 })
+```
+
+### LSP diagnostics
+
+```lua
+local on_attach = function(client, bufnr)
+    local function mapB(mode, l, r, desc)
+        local opts = { noremap = true, silent = true, buffer = bufnr, desc = desc }
+        vim.keymap.set(mode, l, r, opts)
+    end
+
+    local nndiag = next_integrations.diagnostic()
+    mapB("n", "[d", nndiag.goto_prev({ wrap = false, severity = { min = diag.severity.WARN } }), "previous diagnostic")
+    mapB("n", "]d", nndiag.goto_next({ wrap = false, severity = { min = diag.severity.WARN } }), "next diagnostic")
+```
+
+### Treesitter text-objects
+
+```lua
+-- first initialize intgration module
+require("nvim-next.integrations").treesitter_textobjects()
+-- setup treesitter
+require("nvim-treesitter.configs").setup({
+    textobjects = {
+        swap = {
+            enable = true,
+            swap_next = {
+                ["<leader>a"] = "@parameter.inner",
+            },
+            swap_previous = {
+                ["<leader>A"] = "@parameter.inner",
+            },
+        },
+    },
+    nvim_next = {
+        enable = true,
+        --instead of defining the move section in the textobjects scope we move it under nvim_next
+        move = {
+            goto_next_start = {
+                ["]m"] = "@function.outer",
+                ["]]"] = { query = "@class.outer", desc = "Next class start" },
+            },
+            goto_next_end = {
+                ["]M"] = "@function.outer",
+                ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+                ["[m"] = "@function.outer",
+                ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+                ["[M"] = "@function.outer",
+                ["[]"] = "@class.outer",
+            },
+        }
+    }
+})
+```
+
+## Writing a custom adapter
+
+TODO
+
+The protocol for `func_next` and `func_prev` is defined as follows:
+They need to accept a structure:
+
+```lua
+{ result = nil --here goes results of whatever your function returned,
+               --nil if that is a first invocation ,
+  repeating = true --if the call is repeated, false otherwise
+}
 ```
 
 # Credits

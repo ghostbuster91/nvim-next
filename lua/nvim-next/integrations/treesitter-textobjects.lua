@@ -8,7 +8,9 @@ local nxo_mode_functions = {
     "goto_next",
     "goto_previous",
 }
-return function(ts_move)
+local function setup_next(queries)
+    local configs = require "nvim-treesitter.configs"
+    local ts_move = require "nvim-treesitter.textobjects.move"
     local M = {}
 
     local prev_start, next_start = move.make_repeatable_pair(function(opts)
@@ -38,7 +40,9 @@ return function(ts_move)
     M.goto_prev = prev
     M.goto_next = next
 
-    M.attach = function(config)
+
+    local function setup_bindings(bufnr, bind)
+        local config = configs.get_module "nvim_next"
         for _, function_call in ipairs(nxo_mode_functions) do
             for mapping, query_metadata in pairs(config.move[function_call]) do
                 local mapping_description, query, query_group
@@ -57,15 +61,46 @@ return function(ts_move)
                     M[function_call](query, query_group)
                 end
 
-                vim.keymap.set(
-                    { "n", "x", "o" },
-                    mapping,
-                    fn,
-                    { --[[ buffer = bufnr ]] silent = true, remap = false, desc = mapping_description }
-                )
+
+                bind({ "n", "x", "o" }, mapping, fn,
+                    { buffer = bufnr, silent = true, remap = false, desc = mapping_description })
             end
         end
     end
 
+    M.attach = function(bufnr, lang)
+        lang = lang or parsers.get_buf_lang(bufnr)
+        if not queries.get_query(lang, "textobjects") then
+            return
+        end
+        setup_bindings(bufnr, vim.keymap.set)
+    end
+
+    M.detach = function(bufnr)
+        setup_bindings(bufnr, vim.keymap.del)
+    end
+
     return M
+end
+
+return function()
+    local queries = require "nvim-treesitter.query"
+    local nvim_next = setup_next(queries)
+    require("nvim-treesitter").define_modules {
+        nvim_next = {
+            attach = nvim_next.attach,
+            detach = nvim_next.detach,
+            is_supported = function(lang)
+                return queries.has_query_files(lang, "textobjects")
+            end,
+            move = {
+                goto_next_start = {},
+                goto_next_end = {},
+                goto_previous_start = {},
+                goto_previous_end = {},
+                goto_next = {},
+                goto_previous = {},
+            },
+        },
+    }
 end
