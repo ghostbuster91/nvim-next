@@ -28,6 +28,7 @@ Frist you need to initialize nvim-next. This will map `;` and  `,` to respetive 
 local nvim_next_builtins = require("nvim-next.builtins")
 require("nvim-next").setup({
     default_mappings = true, --set , and ; mappings
+    repeat_style = "directional"
     items = {
         nvim_next_builtins.f,
         nvim_next_builtins.t
@@ -35,7 +36,9 @@ require("nvim-next").setup({
 })
 ```
 
-Any mappings including the `f`/`t` can be also set later using following syntax:
+The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction of the repeat key: `;` - forward, `,` - backward. 
+
+Any mappings including `f`/`t` can be also set later using following syntax:
 
 ```lua
 local next = require("nvim-next").setup()
