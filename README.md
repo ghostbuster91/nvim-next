@@ -35,8 +35,8 @@ Any mappings including the `f`/`t` can be also set later using following syntax:
 
 ```lua
 local next = require("nvim-next").setup()
-vim.keymap.set("n", "f", next.make_repeatable_move(functions.f, functions.F))
-vim.keymap.set("n", "F", next.make_repeatable_move(functions.f, functions.F))
+vim.keymap.set("n", "f", next.make_repeatable_pair(functions.F, functions.f)) -- (prev, next)
+vim.keymap.set("n", "F", next.make_repeatable_pair(functions.f, functions.F))
 ```
 
 ## 3rd party integrations
