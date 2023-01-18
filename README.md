@@ -72,6 +72,7 @@ require("gitsigns").setup({
 ### LSP diagnostics
 
 ```lua
+local next_integrations = require("nvim-next.integrations")
 local on_attach = function(client, bufnr)
     local function mapB(mode, l, r, desc)
         local opts = { noremap = true, silent = true, buffer = bufnr, desc = desc }
