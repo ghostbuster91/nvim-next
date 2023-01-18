@@ -16,6 +16,10 @@ You can think of it as of `nvim-cmp` but for movements.
 The idea is that other plugins like for example git-signs will expose logic to perform some movement,
 and then we will wrap it with an adapter and plug into that engine.
 
+#### Current state of the project
+
+The project is in a very early state. In addition to that, it is also my first neovim plugin. Expect unexpected. Having said that, I am using it on a dialy basis and I am planning to keep it like that.
+
 ### Getting started
 
 Frist you need to initialize nvim-next. This will map `;` and  `,` to respetive nvim-next functions. Here you might also want to override the builtin `f`/`t` functions to have a consistent bevahior with the rest of the movements.
