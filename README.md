@@ -16,7 +16,7 @@ You can think of it as of `nvim-cmp` but for movements.
 The idea is that other plugins like for example git-signs will expose logic to perform some movement,
 and then we will wrap it with an adapter and plug into that engine.
 
-### Example 1: Overriding builtin f/t movements
+### Getting started: Overriding builtin f/t movements
 
 ```lua
 local nvim_next_builtins = require("nvim-next.builtins")
