@@ -107,25 +107,27 @@ require("nvim-treesitter.configs").setup({
         },
     },
     nvim_next = {
-        enable = true,
-        --instead of defining the move section in the textobjects scope we move it under nvim_next
-        move = {
-            goto_next_start = {
-                ["]m"] = "@function.outer",
-                ["]]"] = { query = "@class.outer", desc = "Next class start" },
-            },
-            goto_next_end = {
-                ["]M"] = "@function.outer",
-                ["]["] = "@class.outer",
-            },
-            goto_previous_start = {
-                ["[m"] = "@function.outer",
-                ["[["] = "@class.outer",
-            },
-            goto_previous_end = {
-                ["[M"] = "@function.outer",
-                ["[]"] = "@class.outer",
-            },
+        textobjects = {
+            enable = true,
+            --instead of defining the move section in the textobjects scope we move it under nvim_next
+            move = {
+                goto_next_start = {
+                    ["]m"] = "@function.outer",
+                    ["]]"] = { query = "@class.outer", desc = "Next class start" },
+                },
+                goto_next_end = {
+                    ["]M"] = "@function.outer",
+                    ["]["] = "@class.outer",
+                },
+                goto_previous_start = {
+                    ["[m"] = "@function.outer",
+                    ["[["] = "@class.outer",
+                },
+                goto_previous_end = {
+                    ["[M"] = "@function.outer",
+                    ["[]"] = "@class.outer",
+                },
+            }
         }
     }
 })

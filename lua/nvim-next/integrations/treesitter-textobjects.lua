@@ -42,7 +42,7 @@ local function setup_next(queries)
 
 
     local function setup_bindings(bufnr, bind)
-        local config = configs.get_module "nvim_next"
+        local config = configs.get_module "nvim_next.textobjects"
         for _, function_call in ipairs(nxo_mode_functions) do
             for mapping, query_metadata in pairs(config.move[function_call]) do
                 local mapping_description, query, query_group
