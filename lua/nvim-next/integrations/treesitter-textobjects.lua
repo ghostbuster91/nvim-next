@@ -11,6 +11,7 @@ local nxo_mode_functions = {
 local function setup_next(queries)
     local configs = require "nvim-treesitter.configs"
     local ts_move = require "nvim-treesitter.textobjects.move"
+    local parsers = require "nvim-treesitter.parsers"
     local M = {}
 
     local prev_start, next_start = move.make_repeatable_pair(function(opts)
@@ -61,7 +62,6 @@ local function setup_next(queries)
                     M[function_call](query, query_group)
                 end
 
-
                 bind({ "n", "x", "o" }, mapping, fn,
                     { buffer = bufnr, silent = true, remap = false, desc = mapping_description })
             end
@@ -73,7 +73,12 @@ local function setup_next(queries)
         if not queries.get_query(lang, "textobjects") then
             return
         end
-        setup_bindings(bufnr, vim.keymap.set)
+        local status, err = pcall(function()
+            setup_bindings(bufnr, vim.keymap.set)
+        end)
+        if not status then
+            vim.notify(err, vim.log.levels.ERROR)
+        end
     end
 
     M.detach = function(bufnr)
