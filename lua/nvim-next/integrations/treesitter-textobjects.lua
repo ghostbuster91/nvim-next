@@ -43,9 +43,9 @@ local function setup_next(queries)
 
 
     local function setup_bindings(bufnr, bind)
-        local config = configs.get_module "nvim_next.textobjects"
+        local config = configs.get_module "nvim_next"
         for _, function_call in ipairs(nxo_mode_functions) do
-            for mapping, query_metadata in pairs(config.move[function_call]) do
+            for mapping, query_metadata in pairs(config.textobjects.move[function_call]) do
                 local mapping_description, query, query_group
 
                 if type(query_metadata) == "table" then
@@ -98,14 +98,16 @@ return function()
             is_supported = function(lang)
                 return queries.has_query_files(lang, "textobjects")
             end,
-            move = {
-                goto_next_start = {},
-                goto_next_end = {},
-                goto_previous_start = {},
-                goto_previous_end = {},
-                goto_next = {},
-                goto_previous = {},
-            },
+            textobjects = {
+                move = {
+                    goto_next_start = {},
+                    goto_next_end = {},
+                    goto_previous_start = {},
+                    goto_previous_end = {},
+                    goto_next = {},
+                    goto_previous = {},
+                },
+            }
         },
     }
 end
