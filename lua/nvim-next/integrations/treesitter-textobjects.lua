@@ -10,8 +10,8 @@ local nxo_mode_functions = {
 }
 local function setup_next(queries)
     local configs = require "nvim-treesitter.configs"
-    local ts_move = require "nvim-treesitter.textobjects.move"
     local parsers = require "nvim-treesitter.parsers"
+    local ts_move = configs.get_module("textobjects.move")
     local M = {}
 
     local prev_start, next_start = move.make_repeatable_pair(function(opts)
