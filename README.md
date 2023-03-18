@@ -147,6 +147,25 @@ They need to accept a structure:
 }
 ```
 
+Example:
+```lua
+local next_move = require("nvim-next.move")
+local prev_qf_item, next_qf_item = next_move.make_repeatable_pair(function(_)
+    local status, err = pcall(vim.cmd, "cprevious")
+    if not status then
+        vim.notify("No more items", vim.log.levels.INFO)
+    end
+end, function(_)
+    local status, err = pcall(vim.cmd, "cnext")
+    if not status then
+        vim.notify("No more items", vim.log.levels.INFO)
+    end
+end)
+
+map("n", "]q", next_qf_item, { desc = "nvim-next: next qfix" })
+map("n", "[q", prev_qf_item, { desc = "nvim-next: prev qfix" })
+```
+
 # Credits
 
 The initial code for that plugin was created by @kiyoon during work at https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/359
