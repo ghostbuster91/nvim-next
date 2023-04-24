@@ -12,7 +12,7 @@ local function setup(config)
     config = vim.deepcopy(config or {})
     config = vim.tbl_deep_extend("force", {}, default_config, config)
     if config.default_mappings.enable then
-        if config.default_mappings.repeat_style == "orignal" then
+        if config.default_mappings.repeat_style == "original" then
             vim.keymap.set({ "n" }, ";", move.repeat_last_move, { desc = "nvim-next", noremap = true })
             vim.keymap.set({ "n" }, ',', move.repeat_last_move_opposite, { desc = "nvim-prev", noremap = true })
         elseif config.default_mappings.repeat_style == "directional" then
