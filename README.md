@@ -25,15 +25,16 @@ The project is in a very early state. In addition to that, it is also my first n
 Frist you need to initialize nvim-next. This will map `;` and  `,` to respetive nvim-next functions. Here you might also want to override the builtin `f`/`t` functions to have a consistent bevahior with the rest of the movements.
 
 ```lua
-local nvim_next_builtins = require("nvim-next.builtins")
-require("nvim-next").setup({
-    default_mappings = true, --set , and ; mappings
-    repeat_style = "original"
-    items = {
-        nvim_next_builtins.f,
-        nvim_next_builtins.t
-    }
-})
+local nvim_next_builtins = require("nvim-next.builtins") 
+ require("nvim-next").setup({ 
+     default_mappings = {
+         repeat_style = "original", 
+     }, 
+     items = { 
+         nvim_next_builtins.f, 
+         nvim_next_builtins.t 
+     } 
+ })
 ```
 
 The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward. 
