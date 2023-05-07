@@ -22,22 +22,22 @@ The project is in a very early state. In addition to that, it is also my first n
 
 ## Getting started
 
-Frist you need to initialize nvim-next. This will map `;` and  `,` to respetive nvim-next functions. Here you might also want to override the builtin `f`/`t` functions to have a consistent bevahior with the rest of the movements.
+Frist you need to initialize nvim-next. This will map `;` and `,` to respetive nvim-next functions. Here you might also want to override the builtin `f`/`t` functions to have a consistent bevahior with the rest of the movements.
 
 ```lua
-local nvim_next_builtins = require("nvim-next.builtins") 
- require("nvim-next").setup({ 
+local nvim_next_builtins = require("nvim-next.builtins")
+ require("nvim-next").setup({
      default_mappings = {
-         repeat_style = "original", 
-     }, 
-     items = { 
-         nvim_next_builtins.f, 
-         nvim_next_builtins.t 
-     } 
+         repeat_style = "original",
+     },
+     items = {
+         nvim_next_builtins.f,
+         nvim_next_builtins.t
+     }
  })
 ```
 
-The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward. 
+The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward.
 
 Any mappings including `f`/`t` can be also set later using following syntax:
 
@@ -85,11 +85,11 @@ local on_attach = function(client, bufnr)
 
     local nndiag = next_integrations.diagnostic()
     mapB("n", "[d", nndiag.goto_prev({ severity = { min = diag.severity.WARN } }), "previous diagnostic")
-    mapB("n", "]d", nndiag.goto_next({ severity = { min = diag.severity.WARN } }), "next diagnostic") 
+    mapB("n", "]d", nndiag.goto_next({ severity = { min = diag.severity.WARN } }), "next diagnostic")
 end
 ```
 
-### Treesitter text-objects
+### [Treesitter text-objects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
 
 ```lua
 -- first initialize intgration module
@@ -108,8 +108,8 @@ require("nvim-treesitter.configs").setup({
         },
     },
     nvim_next = {
+        enable = true,
         textobjects = {
-            enable = true,
             --instead of defining the move section in the textobjects scope we move it under nvim_next
             move = {
                 goto_next_start = {
@@ -149,6 +149,7 @@ They need to accept a structure:
 ```
 
 Example:
+
 ```lua
 local next_move = require("nvim-next.move")
 local prev_qf_item, next_qf_item = next_move.make_repeatable_pair(function(_)
