@@ -56,6 +56,13 @@ local function builtin_find(forward, inclusive, char, repeating)
         repeating = true -- after the first iteration, search from the next character if not inclusive.
     end
 
+    -- Enter visual mode if we are in operator-pending mode
+    -- If we don't do this, it will miss the last character.
+    local mode = vim.api.nvim_get_mode()
+    if mode.mode == "no" then
+        vim.cmd "normal! v"
+    end
+
     -- move to the found position
     vim.api.nvim_win_set_cursor(0, { cursor[1], cursor[2] })
     return char
