@@ -41,8 +41,10 @@ local function setup_next(queries)
     M.goto_prev = prev
     M.goto_next = next
 
+    M.keymaps_per_buf = {}
 
-    local function setup_bindings(bufnr, bind)
+    local function setup_bindings(bufnr)
+        local keymap_modes = { "n", "x", "o" }
         local config = configs.get_module "nvim_next"
         for _, function_call in ipairs(nxo_mode_functions) do
             for mapping, query_metadata in pairs(config.textobjects.move[function_call]) do
@@ -62,8 +64,19 @@ local function setup_next(queries)
                     M[function_call](query, query_group)
                 end
 
-                bind({ "n", "x", "o" }, mapping, fn,
-                    { buffer = bufnr, silent = true, remap = false, desc = mapping_description })
+                for _, mode in pairs(keymap_modes) do
+                    local status, _ = pcall(
+                        vim.keymap.set,
+                        mode,
+                        mapping,
+                        fn,
+                        { buffer = bufnr, silent = true, remap = false, desc = mapping_description }
+                    )
+                    if status then
+                        M.keymaps_per_buf[bufnr] = M.keymaps_per_buf[bufnr] or {}
+                        table.insert(M.keymaps_per_buf[bufnr], { mode = mode, lhs = mapping })
+                    end
+                end
             end
         end
     end
@@ -73,16 +86,19 @@ local function setup_next(queries)
         if not queries.get_query(lang, "textobjects") then
             return
         end
-        local status, err = pcall(function()
-            setup_bindings(bufnr, vim.keymap.set)
-        end)
-        if not status then
-            vim.notify(err, vim.log.levels.ERROR)
-        end
+        setup_bindings(bufnr)
     end
 
     M.detach = function(bufnr)
-        setup_bindings(bufnr, vim.keymap.del)
+        local keymaps_per_buf = M.keymaps_per_buf[bufnr] or {}
+
+        bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+        for _, keymap in ipairs(keymaps_per_buf) do
+            -- Even if it fails make it silent
+            pcall(vim.keymap.del, { keymap.mode }, keymap.lhs, { buffer = bufnr })
+        end
+        M.keymaps_per_buf[bufnr] = nil
     end
 
     return M
