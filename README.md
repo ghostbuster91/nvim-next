@@ -73,20 +73,13 @@ require("gitsigns").setup({
 })
 ```
 
-### LSP diagnostics
+### Diagnostics
 
 ```lua
 local next_integrations = require("nvim-next.integrations")
-local on_attach = function(client, bufnr)
-    local function mapB(mode, l, r, desc)
-        local opts = { noremap = true, silent = true, buffer = bufnr, desc = desc }
-        vim.keymap.set(mode, l, r, opts)
-    end
-
-    local nndiag = next_integrations.diagnostic()
-    mapB("n", "[d", nndiag.goto_prev({ severity = { min = diag.severity.WARN } }), "previous diagnostic")
-    mapB("n", "]d", nndiag.goto_next({ severity = { min = diag.severity.WARN } }), "next diagnostic")
-end
+local nndiag = next_integrations.diagnostic()
+vim.keymap.set("n", "[d", nndiag.goto_prev({ severity = { min = diag.severity.WARN } }), { desc = "previous diagnostic" })
+vim.keymap.set("n", "]d", nndiag.goto_next({ severity = { min = diag.severity.WARN } }), { desc = "next diagnostic" })
 ```
 
 ### [Treesitter text-objects](https://github.com/nvim-treesitter/nvim-treesitter-textobjects)
@@ -132,6 +125,15 @@ require("nvim-treesitter.configs").setup({
         }
     }
 })
+```
+
+### Quickfix list
+
+```lua
+local next_integrations = require("nvim-next.integrations")
+local nqf = next_integrations.quickfix()
+vim.keymap.set("n", "[d", nqf.cprevious, { desc = "previous quickfix list item" })
+vim.keymap.set("n", "]d", nqf.cnext, { desc = "next quickfix list item" })
 ```
 
 ## Writing a custom adapter
