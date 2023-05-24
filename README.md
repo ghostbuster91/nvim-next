@@ -51,7 +51,7 @@ vim.keymap.set("n", "F", next.make_repeatable_pair(functions.f, functions.F))
 
 Nvim-next comes with multiple integrations out of the box for many popular plugins. Can't find your favorite one? Don't hesitate and create an issue. PRs are more than welcome.
 
-### [Gitsings](https://github.com/lewis6991/gitsigns.nvim)
+### [Gitsigns](https://github.com/lewis6991/gitsigns.nvim)
 
 ```lua
 local next_integrations = require("nvim-next.integrations")
