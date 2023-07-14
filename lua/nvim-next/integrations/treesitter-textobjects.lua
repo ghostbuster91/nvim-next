@@ -53,7 +53,7 @@ local function setup_next(queries)
                 if type(query_metadata) == "table" then
                     query = query_metadata.query
                     query_group = query_metadata.query_group or "textobjects"
-                    mapping_description = query_metadata.desc
+                    mapping_description = "nvim-next:" .. " " .. query_metadata.desc
                 else
                     query = query_metadata
                     query_group = "textobjects"
