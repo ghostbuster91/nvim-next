@@ -72,8 +72,17 @@ require("gitsigns").setup({
 
         local nngs = next_integrations.gitsigns(gs)
         -- Navigation
-        map('n', ']c', nngs.next_hunk, { expr = true })
-        map('n', '[c', nngs.prev_hunk, { expr = true })
+        map('n', ']c', function()
+            if vim.wo.diff then return ']c' end
+            vim.schedule(function() nngs.next_hunk() end)
+            return '<Ignore>'
+        end, { expr = true })
+
+        map('n', '[c', function()
+            if vim.wo.diff then return '[c' end
+            vim.schedule(function() nngs.prev_hunk() end)
+            return '<Ignore>'
+        end, { expr = true })
     end,
 })
 ```
@@ -143,8 +152,6 @@ vim.keymap.set("n", "]d", nqf.cnext, { desc = "next quickfix list item" })
 
 ## Writing a custom adapter
 
-TODO
-
 The protocol for `func_next` and `func_prev` is defined as follows:
 They need to accept a structure:
 
@@ -152,6 +159,7 @@ They need to accept a structure:
 { result = nil --here goes results of whatever your function returned,
                --nil if that is a first invocation ,
   repeating = true --if the call is repeated, false otherwise
+  args = {} -- table with original arguments
 }
 ```
 

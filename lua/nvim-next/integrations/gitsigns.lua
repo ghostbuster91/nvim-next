@@ -1,41 +1,21 @@
 local move = require("nvim-next.move")
 
-local prev_key = '[c'
-local next_key = ']c'
-
 return function(gs)
-    local next_hunk = function(opts)
-        local opts = opts or {}
-        if vim.wo.diff then return opts.mapping or next_key end
-        vim.schedule(function() gs.next_hunk(opts) end)
-        return '<Ignore>'
-    end
-    local prev_hunk = function(opts)
-        local opts = opts or {}
-        if vim.wo.diff then return opts.mapping or prev_key end
-        vim.schedule(function() gs.prev_hunk(opts) end)
-        return '<Ignore>'
-    end
-
-    local prev_wrapped = function(opts)
-        return move.make_backward_repeatable_move(
-            function()
-                prev_hunk(opts)
-            end,
-            function()
-                next_hunk(opts)
-            end)
-    end
-    local next_wrapped = function(opts)
-        return move.make_forward_repeatable_move(
-            function()
-                next_hunk(opts)
-            end,
-            function()
-                prev_hunk(opts)
-            end
-        )
-    end
+    local prev_wrapped = move.make_backward_repeatable_move(
+        function(opts)
+            gs.prev_hunk(table.unpack(opts.args or {}))
+        end,
+        function(opts)
+            gs.next_hunk(table.unpack(opts.args or {}))
+        end)
+    local next_wrapped = move.make_forward_repeatable_move(
+        function(opts)
+            gs.next_hunk(table.unpack(opts.args or {}))
+        end,
+        function(opts)
+            gs.prev_hunk(table.unpack(opts.args or {}))
+        end
+    )
     return {
         on_attach = function(bufnr)
             local function map(mode, l, r, opts)
@@ -44,8 +24,18 @@ return function(gs)
                 vim.keymap.set(mode, l, r, opts)
             end
 
-            map('n', next_key, next_wrapped({ mapping = next_key }), { expr = true })
-            map('n', prev_key, prev_wrapped({ mapping = prev_key }), { expr = true })
+            -- Navigation
+            map('n', ']c', function()
+                if vim.wo.diff then return ']c' end
+                vim.schedule(function() next_wrapped() end)
+                return '<Ignore>'
+            end, { expr = true })
+
+            map('n', '[c', function()
+                if vim.wo.diff then return '[c' end
+                vim.schedule(function() prev_wrapped() end)
+                return '<Ignore>'
+            end, { expr = true })
         end,
         next_hunk = next_wrapped,
         prev_hunk = prev_wrapped
