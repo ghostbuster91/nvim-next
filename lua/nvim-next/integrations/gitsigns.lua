@@ -3,17 +3,17 @@ local move = require("nvim-next.move")
 return function(gs)
     local prev_wrapped = move.make_backward_repeatable_move(
         function(opts)
-            gs.prev_hunk(table.unpack(opts.args or {}))
+            gs.prev_hunk(unpack(opts.args or {}))
         end,
         function(opts)
-            gs.next_hunk(table.unpack(opts.args or {}))
+            gs.next_hunk(unpack(opts.args or {}))
         end)
     local next_wrapped = move.make_forward_repeatable_move(
         function(opts)
-            gs.next_hunk(table.unpack(opts.args or {}))
+            gs.next_hunk(unpack(opts.args or {}))
         end,
         function(opts)
-            gs.prev_hunk(table.unpack(opts.args or {}))
+            gs.prev_hunk(unpack(opts.args or {}))
         end
     )
     return {
