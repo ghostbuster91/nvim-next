@@ -1,16 +1,16 @@
 # nvim-next
 
-Repeateable movements reborn!
+Repeat-able movements reborn!
 
-By default vim allows repating default movements like `f`/`F`/`t`/`T` and others using `;` and `,`.
+By default vim allows repeating default movements like `f`/`F`/`t`/`T` and others using `;` and `,`.
 However, the builtin mechanism is not extendable and as soon as we start using some custom movements we are left to implement
 the repeating on your own. Some plugins provide that options some don't. But even when they do,
 they do it in a way that steals `;` for themselves.
 
-While I don't use repeating movments often with default motions,
+While I don't use repeating movements often with default motions,
 I would like to use them with motions like next-treesitter-method, next-diagnostic, next-git-change, etc that comes from many different plugins.
 
-This plugin is a repeatable movments engine that other plugins can hook into.
+This plugin is a repeatable movements engine that other plugins can hook into.
 You can think of it as of `nvim-cmp` but for movements.
 
 The idea is that other plugins like for example git-signs will expose logic to perform some movement,
@@ -18,32 +18,42 @@ and then we will wrap it with an adapter and plug into that engine.
 
 ## Current state of the project
 
-The project is in a very early state. In addition to that, it is also my first neovim plugin. Expect unexpected. Having said that, I am using it on a dialy basis and I am planning to keep it like that.
+The project is in a very early state. In addition to that, it is also my first neovim plugin. Expect unexpected. Having said that, I am using it on a daily basis and I am planning to keep it like that.
 
 ## Getting started
 
-Frist you need to initialize nvim-next. This will map `;` and `,` to respetive nvim-next functions. Here you might also want to override the builtin `f`/`t` functions to have a consistent bevahior with the rest of the movements.
+First you need to initialize nvim-next. This will map `;` and `,` to respective nvim-next functions.
 
 ```lua
-local nvim_next_builtins = require("nvim-next.builtins")
- require("nvim-next").setup({
-     default_mappings = {
-         repeat_style = "original",
-     },
-     items = {
-         nvim_next_builtins.f,
-         nvim_next_builtins.t
-     }
- })
+require("nvim-next").setup({
+   default_mappings = {
+       repeat_style = "original",
+   },
+})
 ```
 
-The `repeat_style` parameter contols if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward.
+The `repeat_style` parameter controls if the repetition preserves the `original` direction of the move, or if it uses the direction (`directional`) of the repeat key: `;` - forward, `,` - backward.
 
-Any mappings including `f`/`t` can be also set later using following syntax:
+You might also want to override the builtin `f`/`t` functions to have a consistent behavior with the rest of the movements.
+The easiest way to do this is by extending the setup configuration:
 
 ```lua
-local next = require("nvim-next").setup()
-vim.keymap.set("n", "f", next.make_repeatable_pair(functions.F, functions.f)) -- (prev, next)
+require("nvim-next").setup({
+   default_mappings = {
+       repeat_style = "original",
+   },
+   items = {
+     nvim_next_builtins.f,
+     nvim_next_builtins.t
+   }
+})
+```
+
+Alternatively, you can map it on your own:
+
+```lua
+local functions = require("nvim-next.builtins.functions")
+vim.keymap.set("n", "f", next.make_repeatable_pair(functions.F, functions.f))
 vim.keymap.set("n", "F", next.make_repeatable_pair(functions.f, functions.F))
 ```
 
