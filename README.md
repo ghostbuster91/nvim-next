@@ -38,7 +38,7 @@ You might also want to override the builtin `f`/`t` functions to have a consiste
 The easiest way to do this is by extending the setup configuration:
 
 ```lua
-require("nvim-next").setup({
+local next = require("nvim-next").setup({
    default_mappings = {
        repeat_style = "original",
    },
@@ -53,8 +53,9 @@ Alternatively, you can map it on your own:
 
 ```lua
 local functions = require("nvim-next.builtins.functions")
-vim.keymap.set("n", "f", next.make_repeatable_pair(functions.F, functions.f))
-vim.keymap.set("n", "F", next.make_repeatable_pair(functions.f, functions.F))
+local f_backward, f_forward = next.make_repeatable_pair(functions.F, functions.f)
+vim.keymap.set("n", "f", f_forward)
+vim.keymap.set("n", "F", f_backward)
 ```
 
 ## 3rd party integrations
