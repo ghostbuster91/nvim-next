@@ -1,4 +1,5 @@
 local move = require("nvim-next.move")
+local functions = require("nvim-next.builtins.functions")
 
 local default_config = {
     default_mappings = {
@@ -9,6 +10,7 @@ local default_config = {
 }
 
 local function setup(config)
+    _G.NvimNextFunctions = functions -- todo should be autoload?
     config = vim.deepcopy(config or {})
     config = vim.tbl_deep_extend("force", {}, default_config, config)
     if config.default_mappings.enable then
@@ -26,10 +28,14 @@ local function setup(config)
             )
         end
     end
-    for _, i in ipairs(config.items) do
-        vim.keymap.set({ "n", "x", "o" }, i.key_prev, i.func_prev, i.opts)
-        vim.keymap.set({ "n", "x", "o" }, i.key_next, i.func_next, i.opts)
+    for _, item in ipairs(config.items) do
+        for key, bindings in pairs(item) do
+            for _, binding in ipairs(bindings) do
+                vim.keymap.set(binding.mode, key, binding.func, binding.opts)
+            end
+        end
     end
+
     return move
 end
 

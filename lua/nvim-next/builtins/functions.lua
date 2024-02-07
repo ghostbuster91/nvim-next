@@ -78,19 +78,50 @@ local function builtin_find_prev(inclusive, char, repeating)
     return res
 end
 
+local state = {
+    forward = nil,
+    inclusive = nil,
+    result = nil,
+    repeating = nil
+}
+
+M.expr_f = function()
+    state.result = vim.fn.nr2char(vim.fn.getchar())
+    return vim.api.nvim_replace_termcodes('v:<C-u>lua NvimNextFunctions.f()<CR>', true, true, true)
+end
+
 M.f = function(opts)
+    opts = opts or state
     return builtin_find_next("inclusive", opts.result, opts.repeating)
 end
 
+M.expr_F = function()
+    state.result = vim.fn.nr2char(vim.fn.getchar())
+    return vim.api.nvim_replace_termcodes('v:<C-u>lua NvimNextFunctions.F()<CR>', true, true, true)
+end
+
 M.F = function(opts)
+    opts = opts or state
     return builtin_find_prev("inclusive", opts.result, opts.repeating)
 end
 
+M.expr_t = function()
+    state.result = vim.fn.nr2char(vim.fn.getchar())
+    return vim.api.nvim_replace_termcodes('v:<C-u>lua NvimNextFunctions.t()<CR>', true, true, true)
+end
+
 M.t = function(opts)
+    opts = opts or state
     return builtin_find_next(not "inclusive", opts.result, opts.repeating)
 end
 
+M.expr_T = function()
+    state.result = vim.fn.nr2char(vim.fn.getchar())
+    return vim.api.nvim_replace_termcodes('v:<C-u>lua NvimNextFunctions.T()<CR>', true, true, true)
+end
+
 M.T = function(opts)
+    opts = opts or state
     return builtin_find_prev(not "inclusive", opts.result, opts.repeating)
 end
 
