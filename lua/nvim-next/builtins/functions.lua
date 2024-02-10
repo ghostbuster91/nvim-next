@@ -85,6 +85,7 @@ local state = {
     repeating = nil
 }
 
+-- based on https://github.com/echasnovski/mini.nvim/blob/main/lua/mini/jump.lua
 M.expr_f = function()
     state.result = vim.fn.nr2char(vim.fn.getchar())
     return vim.api.nvim_replace_termcodes('v:<C-u>lua NvimNextFunctions.f()<CR>', true, true, true)
