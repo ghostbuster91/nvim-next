@@ -12,7 +12,8 @@ M.repeat_last_move = function(opts_ext)
         elseif opts.force_backward then
             M.last_move.backward(opts)
         else
-            M.last_move.func(opts)
+            local func = M.last_move.repeat_func or M.last_move.func
+            func(opts)
         end
     end
 end
