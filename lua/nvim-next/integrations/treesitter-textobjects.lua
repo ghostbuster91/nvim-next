@@ -38,7 +38,7 @@ local function setup_next(queries)
         ts_move.goto_next(unpack(opts.args or {}))
     end)
 
-    M.goto_prev = prev
+    M.goto_previous = prev
     M.goto_next = next
 
     M.keymaps_per_buf = {}
