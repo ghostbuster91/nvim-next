@@ -1,17 +1,24 @@
 local functions = require("nvim-next.builtins.functions")
-local move = require("nvim-next.move")
 
 return {
     f = {
         key_next = "f",
         key_prev = "F",
-        func_next = move.make_forward_repeatable_move(functions.f, functions.F),
-        func_prev = move.make_backward_repeatable_move(functions.F, functions.f)
+        func_next = functions.builtin_f_expr,
+        func_prev = functions.builtin_F_expr,
+        opts = {
+            expr = true,
+            desc = "nvim-next: builtin f/F"
+        }
     },
     t = {
         key_next = "t",
         key_prev = "T",
-        func_next = move.make_forward_repeatable_move(functions.t, functions.T),
-        func_prev = move.make_forward_repeatable_move(functions.T, functions.t)
+        func_next = functions.builtin_t_expr,
+        func_prev = functions.builtin_T_expr,
+        opts = {
+            expr = true,
+            desc = "nvim-next: builtin t/T"
+        }
     },
 }
