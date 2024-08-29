@@ -18,7 +18,8 @@ and then we will wrap it with an adapter and plug into that engine.
 
 ## Current state of the project
 
-The project is in a very early state. In addition to that, it is also my first neovim plugin. Expect unexpected. Having said that, I am using it on a daily basis and I am planning to keep it like that.
+I have been using this plugin for a while now and it seems to be working fine.
+Sure my usage-patterns might not cover every use-case so if you find a bug please raise an issue.
 
 ## Getting started
 
