@@ -12,22 +12,16 @@ M.repeat_last_move = function(opts_ext)
         -- directly from the https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/622
         -- all credits go to @kiyoon
         if M.last_move.func == "f" or M.last_move.func == "t" then
-            if opts.force_forward then
-                vim.cmd([[normal! ]] .. vim.v.count1 .. ";")
-            else
-                vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
-            end
+            vim.cmd([[normal! ]] .. vim.v.count1 .. ";")
         elseif M.last_move.func == "F" or M.last_move.func == "T" then
-            if opts.force_forward then
+            if opts.directional then
                 vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
             else
                 vim.cmd([[normal! ]] .. vim.v.count1 .. ";")
             end
         else
-            if opts.force_forward then
+            if opts.directional then
                 M.last_move.forward(opts)
-            elseif opts.force_backward then
-                M.last_move.backward(opts)
             else
                 M.last_move.func(opts)
             end
@@ -41,21 +35,15 @@ M.repeat_last_move_opposite = function(opts_ext)
         local opts = vim.tbl_deep_extend("force", {}, M.last_move.opts, opts_ext)
 
         if M.last_move.func == "f" or M.last_move.func == "t" then
-            if opts.force_forward then
-                vim.cmd([[normal! ]] .. vim.v.count1 .. ";")
-            else
-                vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
-            end
+            vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
         elseif M.last_move.func == "F" or M.last_move.func == "T" then
-            if opts.force_forward then
-                vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
-            else
+            if opts.directional then
                 vim.cmd([[normal! ]] .. vim.v.count1 .. ";")
+            else
+                vim.cmd([[normal! ]] .. vim.v.count1 .. ",")
             end
         else
-            if opts.force_forward then
-                M.last_move.forward(opts)
-            elseif opts.force_backward then
+            if opts.directional then
                 M.last_move.backward(opts)
             else
                 M.last_move.opposite(opts)
@@ -66,13 +54,13 @@ end
 
 M.repeat_last_move_forward = function()
     if M.last_move then
-        M.repeat_last_move { force_forward = true }
+        M.repeat_last_move({ directional = true })
     end
 end
 
 M.repeat_last_move_opposite_backward = function()
     if M.last_move then
-        M.repeat_last_move_opposite { force_backward = true }
+        M.repeat_last_move_opposite({ directional = true })
     end
 end
 
